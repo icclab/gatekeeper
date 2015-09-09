@@ -24,10 +24,102 @@
       <h1>
 <a id="gatekeeper" class="anchor" href="#gatekeeper" aria-hidden="true"><span class="octicon octicon-link"></span></a>Gatekeeper APIs</h1>
 
-<p>Welcome to the <em>Gatekeeper</em> module istallation guide. This package is written in Go programming language. It is a simple, lightweight authentication, authorization tool.</p>
+<p>Welcome to the <em>Gatekeeper</em> API usage guide. You will be able to see how easy is it to program against it.</p>
 
 <h2>
-<a id="installation-manual" class="anchor" href="#installation-manual" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation (Manual)</h2>
+<a id="discovery-api" class="anchor" href="#discovery-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Discovery API</h2>
+<p>Performing a HTTP GET against the base URL returns the full REST API calls supported by Gatekeeper</p>
+<h3>Example</h3>
+<pre><code>curl -X GET localhost:8000/ --header "Content-Type:application/json"</code></pre>  
+
+<h3>Example Response</h3>
+<pre><code>
+[
+	{
+		"metadata":
+		{
+			"source": "T-Nova-AuthZ-Service"
+		},
+		"info":
+		[
+			{
+				"msg": "Welcome to the T-Nova-AuthZ-Service",
+				"purpose": "REST API Usage Guide",
+				"disclaimer": "It's not yet final!",
+				"notice": "Headers and body formats are not defined here."
+			}
+		],
+		"api":
+		[
+			{
+				"uri": "/",
+				"method": "GET",
+				"purpose": "REST API Structure and Capability Discovery"
+			},
+			{
+				"uri": "/admin/user/",
+				"method": "GET",
+				"purpose": "Admin API to get list of all users"
+			},
+			{
+				"uri": "/admin/user/",
+				"method": "POST",
+				"purpose": "Create a new user"
+			},
+ 			{
+				"uri": "/admin/user/{user-id}",
+				"method": "GET",
+				"purpose": "Admin API to get detailed info of a particular user"
+			},
+ 			{
+				"uri": "/admin/user/{user-id}",
+				"method": "PUT",
+				"purpose": "Admin API to modify details of a particular user"
+			},
+			{
+				"uri": "/admin/user/{user-id}",
+				"method": "DELETE",
+				"purpose": "Admin API to delete a particular user"
+			},
+			{
+				"uri": "/token/",
+				"method": "POST",
+				"purpose": "API to request a new service token"
+			},
+			{
+				"uri": "/token/{token-uuid}",
+				"method": "GET",
+				"purpose": "Get details of this token, lifetime, user or service id of the creator, etc."
+			},
+			{
+				"uri": "/token/{token-uuid}",
+				"method": "DELETE",
+				"purpose": "Revoke or essentially delete an existing token."
+			},
+			{
+				"uri": "/token/validate/{token-uuid}",
+				"method": "GET",
+				"purpose": "Validate a existing token, OK/Not-OK type status response"
+			},
+			{
+				"uri": "/auth/{user-id}",
+				"method": "GET",
+				"purpose": "Authenticate an existing user. OK/Not-OK type response."
+			},
+			{
+				"uri": "/admin/service/",
+				"method": "GET",
+				"purpose": "Lists all registered services."
+			},
+			{
+				"uri": "/admin/service/",
+				"method": "POST",
+				"purpose": "Registers a new service with gatekeeper."
+			}
+		]
+	}
+]
+</code></pre>
 
 <h3>
 <a id="step-1-install-go-runtime" class="anchor" href="#step-1-install-go-runtime" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 1: Install Go runtime</h3>
