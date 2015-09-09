@@ -29,7 +29,7 @@
 <h2>
 <a id="discovery-api" class="anchor" href="#discovery-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Discovery API</h2>
 <p>Performing a HTTP GET against the base URL returns the full REST API calls supported by Gatekeeper</p>
-<h3>Example</h3>
+<h3>cURL Example</h3>
 <pre><code>curl -X GET localhost:8000/ --header "Content-Type:application/json"</code></pre>  
 
 <h3>Example Response</h3>
@@ -120,6 +120,16 @@
 	}
 ]
 </code></pre>
+
+<h2>
+<a id="admin-apis" class="anchor" href="#admin-apis" aria-hidden="true"><span class="octicon octicon-link"></span></a>Admin APIs</h2>
+<p>These APIs below are accessible only to an administrator user, use of these APIs by non-admin credentials will result in authorization error.</p>
+<h3>API Endpoint: /admin/user/</h3>
+<h4>HTTP Method: GET</h4>
+<h5>cURL Example</h5>
+<pre><code>curl -X GET localhost:8000/admin/user/ --header "Content-Type:application/json" --header "X-Auth-Token:admin-user-token"</code></pre>  
+
+<h5>Example Response</h5>
 
 
 <h2>
