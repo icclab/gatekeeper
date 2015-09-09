@@ -168,7 +168,7 @@ If the <i>admin-user-token</i> provided does not have proper authorization, or i
 <pre><code>curl -X POST localhost:8000/admin/user/ --header "Content-Type:application/json" --header "X-Auth-Token:admin-user-token" -d '{"username":"someuser","password":"somepass","isadmin":"n", "accesslist":"comma separated service shortcodes"}'</code></pre>  
 The <i>admin-user-token</i> used in the above call must be generated using the <a href="#token-gen">token generation</a> API and using the admin credentials while doing so. The <i>comma separated service shortcodes</i> specifies the list of services this user will be allowed access to. The <i>service shortcode</i> is the value specified while <a href="#register-service">registering a service</a> with Gatekeeper.
 <h5>Example Response</h5>
-If the user is registered successfully, the sample response will look like:
+If the user is registered successfully, the sample response will look as shown below. The response contains user-id which must be stored for later use. Also any modification to be made to this user's account need this <i>id</i> to construct the correct API endpoint.
 <pre><code>
 {
 	"metadata":
