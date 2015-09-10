@@ -25,57 +25,57 @@ package main
 import (
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
-	"strings"
 	"io"
 	"log"
+	"strings"
 )
 
 func CheckDB(filePath string) bool {
 	db, err := sql.Open("sqlite3", filePath)
 	var status bool
 	if err != nil {
-        checkErr(err, 1, db)
-    }
-    defer db.Close()
-    
-    err = db.Ping()
+		checkErr(err, 1, db)
+	}
+	defer db.Close()
+
+	err = db.Ping()
 	if err != nil {
-    	panic(err.Error()) // proper error handling instead of panic in your app
+		panic(err.Error()) // proper error handling instead of panic in your app
 	}
 
-    rows, err := db.Query("SELECT name FROM sqlite_master WHERE type='table';")
-    if err != nil {
-    	checkErr(err, 0, db)
-    } else {
-    	defer rows.Close()
-    	for rows.Next() {
-        	var tablename string
-        	err = rows.Scan(&tablename)
-        	checkErr(err, 1, db)
-        	MyFileInfo.Println("While performing DB sanity checks: found table", tablename)
-        	if len("user") == len(tablename) {
-        		if strings.Count(tablename, "user") == 1 {
-        			status = true
-        		}
-        	}
-    	}
-    }
-    return status
+	rows, err := db.Query("SELECT name FROM sqlite_master WHERE type='table';")
+	if err != nil {
+		checkErr(err, 0, db)
+	} else {
+		defer rows.Close()
+		for rows.Next() {
+			var tablename string
+			err = rows.Scan(&tablename)
+			checkErr(err, 1, db)
+			MyFileInfo.Println("While performing DB sanity checks: found table", tablename)
+			if len("user") == len(tablename) {
+				if strings.Count(tablename, "user") == 1 {
+					status = true
+				}
+			}
+		}
+	}
+	return status
 }
 
 func InitDB(filePath string) {
 	db, err := sql.Open("sqlite3", filePath)
 	if err != nil {
-        checkErr(err, 1, db)
-    } 
-    defer db.Close()
-    
-    err = db.Ping()
+		checkErr(err, 1, db)
+	}
+	defer db.Close()
+
+	err = db.Ping()
 	if err != nil {
-    	panic(err.Error()) // proper error handling instead of panic in your app
+		panic(err.Error()) // proper error handling instead of panic in your app
 	} else {
 
-    	var dbCmd = `
+		var dbCmd = `
     			CREATE TABLE 'user' (
     			'uid' INTEGER PRIMARY KEY AUTOINCREMENT,
     			'username' VARCHAR(64) NULL,
@@ -84,11 +84,11 @@ func InitDB(filePath string) {
 				'capability' VARCHAR(128)
 				);
     		`
-    	stmt, err := db.Prepare(dbCmd)
-    	checkErr(err, 1, db)
-    	res, err := stmt.Exec()
-    	checkErr(err, 1, db)
-    	dbCmd = `
+		stmt, err := db.Prepare(dbCmd)
+		checkErr(err, 1, db)
+		res, err := stmt.Exec()
+		checkErr(err, 1, db)
+		dbCmd = `
     			CREATE TABLE 'token' (
     			'uuid' VARCHAR(128) PRIMARY KEY,
     			'uid' INTEGER,
@@ -97,9 +97,9 @@ func InitDB(filePath string) {
 				);
 			`
 		stmt, err = db.Prepare(dbCmd)
-    	checkErr(err, 1, db)
-    	res, err = stmt.Exec()
-    	checkErr(err, 1, db)
+		checkErr(err, 1, db)
+		res, err = stmt.Exec()
+		checkErr(err, 1, db)
 		dbCmd = `
     			CREATE TABLE 'service' (
 				'sid' INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -109,17 +109,17 @@ func InitDB(filePath string) {
 				);
 			`
 		stmt, err = db.Prepare(dbCmd)
-    	checkErr(err, 1, db)
-    	res, err = stmt.Exec()
-    	checkErr(err, 1, db)
-    	MyFileInfo.Println("Created tables user, token, service. System ready. System response:", res)
+		checkErr(err, 1, db)
+		res, err = stmt.Exec()
+		checkErr(err, 1, db)
+		MyFileInfo.Println("Created tables user, token, service. System ready. System response:", res)
 		status := InsertUser(dbArg, "user", cfg.Tnova.Defaultadmin, cfg.Tnova.Adminpassword, "y", "ALL")
 		if status {
 			MyFileInfo.Println("Status of the attempt to store default admin-user:", cfg.Tnova.Defaultadmin, "into the table was:", status)
 		} else {
 			MyFileWarning.Println("Status of the attempt to store default admin-user:", cfg.Tnova.Defaultadmin, "into the table was:", status)
 		}
-    }
+	}
 }
 
 func Initlogger(traceHandle, infoHandle, warningHandle, errorHandle, fileHandle io.Writer) {

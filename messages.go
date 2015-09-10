@@ -23,8 +23,8 @@
 package main
 
 func InitMsgs() {
-	staticMsgs[0] = 
-`[
+	staticMsgs[0] =
+		`[
 	{
 		"metadata": 
 		{
@@ -109,8 +109,8 @@ func InitMsgs() {
 		]
 	}
 ]`
-	staticMsgs[1] = 
-`
+	staticMsgs[1] =
+		`
 {
 	"metadata": 
 	{
@@ -123,8 +123,8 @@ func InitMsgs() {
 		}
 	]
 }`
-	staticMsgs[2] = 
-`
+	staticMsgs[2] =
+		`
 {
 	"metadata": 
 	{
@@ -137,8 +137,8 @@ func InitMsgs() {
 		}
 	]
 }`
-	staticMsgs[3] = 
-`
+	staticMsgs[3] =
+		`
 {
 	"metadata": 
 	{
@@ -154,8 +154,8 @@ func InitMsgs() {
 		}
 	]
 }`
-	staticMsgs[4] = 
-`
+	staticMsgs[4] =
+		`
 {
 	"metadata": 
 	{
@@ -172,8 +172,8 @@ func InitMsgs() {
 		xxx
 	]
 }`
-	staticMsgs[5] = 
-`
+	staticMsgs[5] =
+		`
 {
 	"metadata": 
 	{
@@ -186,8 +186,8 @@ func InitMsgs() {
 		}
 	]
 }`
-	staticMsgs[6] = 
-`
+	staticMsgs[6] =
+		`
 {
 	"metadata": 
 	{
@@ -200,8 +200,8 @@ func InitMsgs() {
 		}
 	]
 }`
-	staticMsgs[7] = 
-`
+	staticMsgs[7] =
+		`
 {
     "metadata":
     {
@@ -225,8 +225,8 @@ func InitMsgs() {
 		]
     }
 }`
-	staticMsgs[8] = 
-`
+	staticMsgs[8] =
+		`
 {
     "metadata":
     {
@@ -244,8 +244,8 @@ func InitMsgs() {
         "valid-until":"time-yyy"
     }
 }`
-	staticMsgs[9] = 
-`
+	staticMsgs[9] =
+		`
 {
     "metadata":
     {
@@ -258,8 +258,8 @@ func InitMsgs() {
         }
     ]
 }`
-	staticMsgs[10] = 
-`
+	staticMsgs[10] =
+		`
 {
     "metadata":
     {
@@ -272,8 +272,8 @@ func InitMsgs() {
         }
     ]
 }`
-	staticMsgs[11] = 
-`
+	staticMsgs[11] =
+		`
 {
     "metadata":
     {
@@ -297,8 +297,8 @@ func InitMsgs() {
 		]
     }
 }`
-	staticMsgs[12] = 
-`
+	staticMsgs[12] =
+		`
 {
 	"metadata": 
 	{
@@ -311,8 +311,8 @@ func InitMsgs() {
 		}
 	]
 }`
-	staticMsgs[13] = 
-`
+	staticMsgs[13] =
+		`
 {
 	"metadata": 
 	{
@@ -327,8 +327,8 @@ func InitMsgs() {
 		}
 	]
 }`
-	staticMsgs[14] = 
-`
+	staticMsgs[14] =
+		`
 {
 	"metadata": 
 	{
@@ -344,8 +344,8 @@ func InitMsgs() {
 		}
 	]
 }`
-	staticMsgs[15] = 
-`
+	staticMsgs[15] =
+		`
 {
 	"metadata": 
 	{
@@ -358,8 +358,8 @@ func InitMsgs() {
 		}
 	]
 }`
-	staticMsgs[16] = 
-`
+	staticMsgs[16] =
+		`
 {
     "metadata":
     {
@@ -372,8 +372,8 @@ func InitMsgs() {
         }
     ]
 }`
-	staticMsgs[17] = 
-`
+	staticMsgs[17] =
+		`
 {
     "metadata":
     {
@@ -386,8 +386,8 @@ func InitMsgs() {
         }
     ]
 }`
-	staticMsgs[18] = 
-`
+	staticMsgs[18] =
+		`
 {
     "metadata":
     {

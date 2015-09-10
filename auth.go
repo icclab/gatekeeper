@@ -23,18 +23,17 @@
 package main
 
 import (
+	"bytes"
+	"crypto/sha1"
+	"database/sql"
+	"encoding/hex"
 	"fmt"
-	"net/http"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
-	"strings"
-	"crypto/sha1"
+	"net/http"
 	"strconv"
-	"bytes"
+	"strings"
 	"time"
-	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
-	"encoding/hex"
 )
 
 func UserAuthHandler(out http.ResponseWriter, in *http.Request) {
@@ -51,16 +50,16 @@ func UserAuthHandler(out http.ResponseWriter, in *http.Request) {
 		passWord = in.Header["X-Auth-Password"][0]
 		MyFileInfo.Println("A valid password [password hidden] received for userid:", id)
 		data := []byte(passWord)
-    	hash := sha1.Sum(data)
-    	//sha1hash := string(hash[:])
+		hash := sha1.Sum(data)
+		//sha1hash := string(hash[:])
 		sha1hash := hex.EncodeToString(hash[:])
-    	MyFileInfo.Println("SHA-1 Hash Generated for the incoming password:", sha1hash)
-    	//get the stored SHA-1 Hash for the incoming user
-    	storedHash := LocatePasswordHash("file:foo.db?cache=shared&mode=rwc", "user", id)
-    	MyFileInfo.Println("SHA-1 hash retrieved for the incoming user:", storedHash)
-    	if strings.HasPrefix(storedHash, sha1hash) && strings.HasSuffix(storedHash, sha1hash) {
-    		out.WriteHeader(http.StatusAccepted) //202 status code
-    		var jsonbody = staticMsgs[7]
+		MyFileInfo.Println("SHA-1 Hash Generated for the incoming password:", sha1hash)
+		//get the stored SHA-1 Hash for the incoming user
+		storedHash := LocatePasswordHash("file:foo.db?cache=shared&mode=rwc", "user", id)
+		MyFileInfo.Println("SHA-1 hash retrieved for the incoming user:", storedHash)
+		if strings.HasPrefix(storedHash, sha1hash) && strings.HasSuffix(storedHash, sha1hash) {
+			out.WriteHeader(http.StatusAccepted) //202 status code
+			var jsonbody = staticMsgs[7]
 			//get the list of all valid tokens associated with this user
 			tokenlist, validitylist := GetTokenList(dbArg, "token", id)
 			var buffer1 bytes.Buffer
@@ -95,48 +94,48 @@ func UserAuthHandler(out http.ResponseWriter, in *http.Request) {
 			jsonbody = strings.Replace(jsonbody, "uuid-xxx", buffer1.String(), 1)
 			jsonbody = strings.Replace(jsonbody, "time-yyy", buffer2.String(), 1)
 			fmt.Fprintln(out, jsonbody)
-    		MyFileInfo.Println("Password matches. User", id, "successfully authenticated.")
-    	} else {
-    		out.WriteHeader(http.StatusUnauthorized) //401 status code
-    		var jsonbody = staticMsgs[6]
+			MyFileInfo.Println("Password matches. User", id, "successfully authenticated.")
+		} else {
+			out.WriteHeader(http.StatusUnauthorized) //401 status code
+			var jsonbody = staticMsgs[6]
 			fmt.Fprintln(out, jsonbody)
-    		MyFileInfo.Println("Password does not match. User", id, "not authenticated.")
-    	}
+			MyFileInfo.Println("Password does not match. User", id, "not authenticated.")
+		}
 	}
-	
-    MyFileInfo.Println("Received request on URI:/auth/{user-id} GET")
+
+	MyFileInfo.Println("Received request on URI:/auth/{user-id} GET")
 }
 
 func LocatePasswordHash(filePath string, tableName string, userId string) string {
 	db, err := sql.Open("sqlite3", filePath)
 	if err != nil {
-        checkErr(err, 1, db)
-    }
-    defer db.Close()
-    
-    err = db.Ping()
+		checkErr(err, 1, db)
+	}
+	defer db.Close()
+
+	err = db.Ping()
 	if err != nil {
-    	panic(err.Error()) // proper error handling instead of panic in your app
+		panic(err.Error()) // proper error handling instead of panic in your app
 	}
 
 	queryStmt := "SELECT password FROM tablename WHERE uid=searchterm;"
-    queryStmt = strings.Replace(queryStmt, "tablename", tableName, 1)
-    queryStmt = strings.Replace(queryStmt, "searchterm", userId, 1)
-    
-    MyFileInfo.Println("SQLite3 Query:", queryStmt)
+	queryStmt = strings.Replace(queryStmt, "tablename", tableName, 1)
+	queryStmt = strings.Replace(queryStmt, "searchterm", userId, 1)
+
+	MyFileInfo.Println("SQLite3 Query:", queryStmt)
 
 	rows, err := db.Query(queryStmt)
-    if err != nil {
-    	MyFileWarning.Println("Caught error in user-password-locate method.")
-    	checkErr(err, 1, db)
-    }
-    defer rows.Close()
-    if rows.Next() {
-    	var passWord string
-        err = rows.Scan(&passWord)
-        checkErr(err, 1, db)
-        return passWord
-    }
-    
+	if err != nil {
+		MyFileWarning.Println("Caught error in user-password-locate method.")
+		checkErr(err, 1, db)
+	}
+	defer rows.Close()
+	if rows.Next() {
+		var passWord string
+		err = rows.Scan(&passWord)
+		checkErr(err, 1, db)
+		return passWord
+	}
+
 	return ""
 }

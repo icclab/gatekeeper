@@ -19,57 +19,57 @@
  *     Author: Piyush Harsh,
  *     URL: piyush-harsh.info
  */
- 
-package main 
+
+package main
 
 import (
+	"code.google.com/p/gcfg"
 	"fmt"
-	"net/http"
 	"github.com/gorilla/mux"
-	"io/ioutil"
 	"io"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"strings"
-	"code.google.com/p/gcfg"
 )
 
 type Config struct {
 	Gatekeeper struct {
-		Port string
+		Port    string
 		LogFile string
-		DbFile string
+		DbFile  string
 	}
 	Tnova struct {
-		Defaultadmin string
+		Defaultadmin  string
 		Adminpassword string
 	}
 }
 
 type user_struct struct {
-    Username string `json:"username"`
-    Password string `json:"password"`
-    AdminFlag string `json:"isadmin"`
+	Username       string `json:"username"`
+	Password       string `json:"password"`
+	AdminFlag      string `json:"isadmin"`
 	CapabilityList string `json:"accesslist"`
 }
 
 type service_struct struct {
-    Shortname string `json:"shortname"`
-    Description string `json:"description"`
+	Shortname   string `json:"shortname"`
+	Description string `json:"description"`
 }
 
 var (
-	Trace	*log.Logger
-	Info	*log.Logger
-	Warning	*log.Logger
-	Error	*log.Logger
-	MyFileTrace	*log.Logger
-	MyFileInfo	*log.Logger
-	MyFileWarning	*log.Logger
-	MyFileError	*log.Logger
-	staticMsgs [20]string
-	cfg Config
-	dbArg string
+	Trace         *log.Logger
+	Info          *log.Logger
+	Warning       *log.Logger
+	Error         *log.Logger
+	MyFileTrace   *log.Logger
+	MyFileInfo    *log.Logger
+	MyFileWarning *log.Logger
+	MyFileError   *log.Logger
+	staticMsgs    [20]string
+	cfg           Config
+	dbArg         string
 )
 
 func main() {
@@ -80,11 +80,11 @@ func main() {
 	}
 	file, err := os.OpenFile(cfg.Gatekeeper.LogFile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
-    	log.Fatalln("Failed to open log file", "auth-utils.log", ":", err)
+		log.Fatalln("Failed to open log file", "auth-utils.log", ":", err)
 	}
 	multi := io.MultiWriter(file, ioutil.Discard)
 	Initlogger(ioutil.Discard, os.Stdout, os.Stdout, os.Stderr, multi)
-	//logger has been initialized at this point 
+	//logger has been initialized at this point
 	InitMsgs()
 	dbArg = "file:foo.db?cache=shared&mode=rwc"
 	dbArg = strings.Replace(dbArg, "foo.db", cfg.Gatekeeper.DbFile, 1)
@@ -101,35 +101,35 @@ func main() {
 	users.Methods("GET").HandlerFunc(UserListHandler)
 	users.Methods("POST").HandlerFunc(UserCreateHandler)
 
-    user := r.Path("/admin/user/{id}").Subrouter()
-    user.Methods("GET").HandlerFunc(UserDetailsHandler)
-    user.Methods("PUT").HandlerFunc(UserUpdateHandler)
-    user.Methods("DELETE").HandlerFunc(UserDeleteHandler)
+	user := r.Path("/admin/user/{id}").Subrouter()
+	user.Methods("GET").HandlerFunc(UserDetailsHandler)
+	user.Methods("PUT").HandlerFunc(UserUpdateHandler)
+	user.Methods("DELETE").HandlerFunc(UserDeleteHandler)
 
-    auth := r.Path("/auth/{id}").Subrouter()
-    auth.Methods("GET").HandlerFunc(UserAuthHandler)
-	
+	auth := r.Path("/auth/{id}").Subrouter()
+	auth.Methods("GET").HandlerFunc(UserAuthHandler)
+
 	tokens := r.Path("/token/").Subrouter()
-    tokens.Methods("POST").HandlerFunc(TokenGenHandler)
-	
+	tokens.Methods("POST").HandlerFunc(TokenGenHandler)
+
 	tokenval := r.Path("/token/validate/{id}").Subrouter()
-    tokenval.Methods("GET").HandlerFunc(TokenValidateHandler)
-	
+	tokenval.Methods("GET").HandlerFunc(TokenValidateHandler)
+
 	services := r.Path("/admin/service/").Subrouter()
 	services.Methods("GET").HandlerFunc(ServiceListHandler)
 	services.Methods("POST").HandlerFunc(ServiceRegisterHandler)
-	
+
 	portArg := ":port"
 	portArg = strings.Replace(portArg, "port", cfg.Gatekeeper.Port, 1)
 	MyFileInfo.Println("Starting server on", portArg)
-    http.ListenAndServe(portArg, r)
-    MyFileInfo.Println("Stopping server on", portArg)
+	http.ListenAndServe(portArg, r)
+	MyFileInfo.Println("Stopping server on", portArg)
 }
 
 func HomeHandler(out http.ResponseWriter, in *http.Request) {
 	out.Header().Set("Content-Type", "application/json")
 	out.WriteHeader(http.StatusOK) //200 status code
 	var jsonbody = staticMsgs[0]
-    fmt.Fprintln(out, jsonbody)
-    MyFileInfo.Println("Received request on URI:/ GET")
+	fmt.Fprintln(out, jsonbody)
+	MyFileInfo.Println("Received request on URI:/ GET")
 }

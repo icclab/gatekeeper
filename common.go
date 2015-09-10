@@ -25,44 +25,44 @@ package main
 import (
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
-	"strings"
-	"strconv"
-	"time"
 	"log"
 	"os/exec" //for calling system call uuidgen
+	"strconv"
+	"strings"
+	"time"
 )
 
 func GetCount(filePath string, tableName string, columnName string, searchTerm string) int {
 	db, err := sql.Open("sqlite3", filePath)
 	if err != nil {
-        checkErr(err, 1, db)
-    }
-    defer db.Close()
-    
-    err = db.Ping()
+		checkErr(err, 1, db)
+	}
+	defer db.Close()
+
+	err = db.Ping()
 	if err != nil {
-    	panic(err.Error()) // proper error handling instead of panic in your app
+		panic(err.Error()) // proper error handling instead of panic in your app
 	}
 
-    queryStmt := "SELECT count(*) FROM tablename WHERE columnname='searchterm';"
-    queryStmt = strings.Replace(queryStmt, "tablename", tableName, 1)
-    queryStmt = strings.Replace(queryStmt, "columnname", columnName, 1)
-    queryStmt = strings.Replace(queryStmt, "searchterm", searchTerm, 1)
+	queryStmt := "SELECT count(*) FROM tablename WHERE columnname='searchterm';"
+	queryStmt = strings.Replace(queryStmt, "tablename", tableName, 1)
+	queryStmt = strings.Replace(queryStmt, "columnname", columnName, 1)
+	queryStmt = strings.Replace(queryStmt, "searchterm", searchTerm, 1)
 
-    MyFileInfo.Println("SQLite3 Query:", queryStmt)
+	MyFileInfo.Println("SQLite3 Query:", queryStmt)
 
-    rows, err := db.Query(queryStmt)
-    if err != nil {
-    	MyFileWarning.Println("Caught error in count method.")
-    	checkErr(err, 1, db)
-    }
-    defer rows.Close()
-    if rows.Next() {
-    	var userCount int
-        err = rows.Scan(&userCount)
-        checkErr(err, 1, db)
-        return userCount
-    }
+	rows, err := db.Query(queryStmt)
+	if err != nil {
+		MyFileWarning.Println("Caught error in count method.")
+		checkErr(err, 1, db)
+	}
+	defer rows.Close()
+	if rows.Next() {
+		var userCount int
+		err = rows.Scan(&userCount)
+		checkErr(err, 1, db)
+		return userCount
+	}
 	return 1
 }
 
@@ -97,16 +97,16 @@ func CheckTokenAdmin(token string) bool {
 
 func genuuid() string {
 	out, err := exec.Command("uuidgen").Output()
-    if err != nil {
-        log.Fatal(err)
-    }
+	if err != nil {
+		log.Fatal(err)
+	}
 	uuid := string(out[:])
 	return uuid
 }
 
 func checkErr(err error, errorType int, db *sql.DB) {
-    if err != nil {
-    	MyFileError.Println("Unrecoverable Error!", err)
-    	panic(err)
-    }
+	if err != nil {
+		MyFileError.Println("Unrecoverable Error!", err)
+		panic(err)
+	}
 }
