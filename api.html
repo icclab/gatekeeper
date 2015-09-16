@@ -11,7 +11,7 @@
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name" onclick="window.history.back();" style="cursor:pointer;">Gatekeeper</h1>
+      <h1 class="project-name" onclick="location.href='index.html'" style="cursor:pointer;">Gatekeeper</h1>
       <h2 class="project-tagline">Lightweight authentication authorization service implemented in go</h2>
       <a href="https://github.com/icclab/gatekeeper" class="btn">View on GitHub</a>
       <a href="https://github.com/icclab/gatekeeper/zipball/master" class="btn">Download .zip</a>
@@ -197,6 +197,46 @@ If the user already exists in the system, the call will fail with following resp
 	[
 		{
 			"msg": "User already exists."
+		}
+	]
+}
+</code></pre>
+
+<h3>API Endpoint: /admin/user/{user-id}</h3>
+<h4>HTTP Method: GET</h4>
+<h5>cURL Example</h5>
+<pre><code>curl -X GET localhost:8000/admin/user/2 --header "Content-Type:application/json" --header "X-Auth-Token:admin-user-token"></code></pre>
+The <i>admin-user-token</i> used in the above call must be generated using the <a href="#token-gen">token generation</a> API and using the admin credentials while doing so.
+<h5>Example Response</h5>
+If the user account exists, then the following sample response will be returned:
+<pre><code>
+{
+	"metadata":
+	{
+		"source": "T-Nova-AuthZ-Service"
+	},
+	"info":
+	[
+		{
+			"msg": "Account details.",
+			"username": "some-user-name",
+			"isadmin": "y/n",
+			"capabilitylist": "comma separated list of service short-codes"
+		}
+	]
+}
+</code></pre>
+If the user account does not exist, then the following response will be returned:
+<pre><code>
+{
+	"metadata":
+	{
+		"source": "T-Nova-AuthZ-Service"
+	},
+	"info":
+	[
+		{
+			"msg": "User not found."
 		}
 	]
 }
