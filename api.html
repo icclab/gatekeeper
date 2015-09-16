@@ -284,6 +284,55 @@ If for some reason, update fails, the following response will be returned:
 }
 </code></pre>
         
+<h3>API Endpoint: /auth/{user-id}</h3>
+<h4>HTTP Method: GET</h4>
+<h5>cURL Example</h5>
+Simple authentication of an user could be performed as shown below:
+<pre><code>curl -X GET localhost:8000/auth/{id} --header "Content-Type:application/json" --header "X-Auth-Password:somepass"</code></pre>
+It is important to note that username is not used in this request, instead the <i>user-id</i> is used. This is the same id which is returned in the response body of <a href="#user-reg">user registration</a> process. If the authentication is successful, then the response returned is:
+<pre><code>
+{
+    "metadata":
+    {
+        "source": "T-Nova-AuthZ-Service"
+    },
+    "info":
+    [
+        {
+            "msg": "Authentication Successful."
+        }
+    ],
+    "tokenlist":
+    {
+        "id":
+		[
+			"3E055F4B-B10F-40FF-9FCD-C55E3E94062B"
+		],
+        "valid-until":
+		[
+			"2015-06-17 18:53:06 +0200 CEST"
+		]
+    }
+}
+</code></pre>
+The response can contain list of active user tokens in response body. If the authentication failes, the following message is returned:
+<pre><code>
+{
+	"metadata":
+	{
+		"source": "T-Nova-AuthZ-Service"
+	},
+	"info":
+	[
+		{
+			"msg": "Incorrect Password."
+		}
+	]
+}
+</code></pre>
+        
+        
+
 <h2>
 <a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
 
