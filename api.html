@@ -241,7 +241,49 @@ If the user account does not exist, then the following response will be returned
 	]
 }
 </code></pre>
-
+        
+<h3>API Endpoint: /admin/user/{user-id}</h3>
+<h4>HTTP Method: PUT</h4>
+<h5>cURL Example</h5>
+Any one of the following three variations could be used
+<pre><code>
+url -X PUT localhost:8000/admin/user/{id} --header "Content-Type:application/json" --header "X-Auth-Token:admin-user-token" -d '{"isadmin":"y"}'
+url -X PUT localhost:8000/admin/user/{id} --header "Content-Type:application/json" --header "X-Auth-Token:admin-user-token" -d '{"accesslist":"servicex,servicey"}'
+url -X PUT localhost:8000/admin/user/{id} --header "Content-Type:application/json" --header "X-Auth-Token:admin-user-token" -d '{"accesslist":"servicex,servicey","isadmin":"y"}'
+</code></pre>
+The <i>isadmin</i> and <i>accesslist</i> fields contains the new values for the user account. The <i>admin-user-token</i> used in the above call must be generated using the <a href="#token-gen">token generation</a> API and using the admin credentials while doing so.
+<h5>Example Response</h5>
+If the user account exists and the update was successful, then the following sample response will be returned:
+<pre><code>
+{
+    "metadata":
+    {
+        "source": "T-Nova-AuthZ-Service"
+    },
+    "info":
+    [
+        {
+            "msg": "Update Successful."
+        }
+    ]
+}
+</code></pre>
+If for some reason, update fails, the following response will be returned:
+<pre><code>
+{
+	"metadata":
+	{
+		"source": "T-Nova-AuthZ-Service"
+	},
+	"info":
+	[
+		{
+			"msg": "Update Failed."
+		}
+	]
+}
+</code></pre>
+        
 <h2>
 <a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
 
