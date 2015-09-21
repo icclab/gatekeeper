@@ -331,8 +331,49 @@ The response can contain list of active user tokens in response body. If the aut
 }
 </code></pre>
         
+<h3>API Endpoint: /token/</h3>
+<h4>HTTP Method: POST</h4>
+<h5>cURL Example</h5>     
+<pre><code>curl -X POST localhost:8000/token/ --header "Content-Type:application/json" --header "X-Auth-Password:somepass" --header "X-Auth-Uid:{id}"</code></pre>
+The <i>X-Auth-Uid</i> value is the user-id which is returned when the user details were registered with Gatekeeper. If the password is correct, the call returns a new token along with the validity.
+If the user authentication is successful, the (example) response is:
+<pre><code>
+{
+    "metadata":
+    {
+        "source": "T-Nova-AuthZ-Service"
+    },
+    "info":
+    [
+        {
+            "msg": "Token Details."
+        }
+    ],
+    "token":
+    {
+        "id":"13D707C4-BF77-4CE3-98D9-772D51A3BCC0",
+        "valid-until":"2015-06-17 19:03:58.616306246 +0200 CEST"
+    }
+}
+</code></pre>
+And if the authentication fails, the API returns:
+<pre><code>
+{
+	"metadata":
+	{
+		"source": "T-Nova-AuthZ-Service"
+	},
+	"info":
+	[
+		{
+			"msg": "Incorrect Password."
+		}
+	]
+}
+</code></pre>
         
-
+        
+        
 <h2>
 <a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
 
