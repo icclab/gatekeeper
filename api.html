@@ -371,7 +371,46 @@ And if the authentication fails, the API returns:
 	]
 }
 </code></pre>
+    
+<h3>API Endpoint: /token/validate/{token-uuid}</h3>
+<h4>HTTP Method: GET</h4>
+<h5>cURL Example</h5>     
+<pre><code>
+curl -X GET localhost:8000/token/validate/{token-uuid} --header "Content-Type:application/json" --header "X-Auth-Uid:{id}"
+curl -X GET localhost:8000/token/validate/{token-uuid} --header "Content-Type:application/json" --header "X-Auth-Service-Key:{service-key}"
+</code></pre>     
+This API can be used by the user or user-proxy process to validate an existing token, or it can be used by a service (the service should be already registered with Gatekeeper) to perform authorization check for a user against the presented token. The <i>token-uuid</i> is the token that has to be validated, and <i>id</i> is the user-id. If a registered service makes the API call, the <i>service-key</i> is the unique key associated with a particular service by Gatekeeper. If the validation / authorization of the token is successful, the following response is returned:
+<pre><code>
+{
+   "metadata":
+   {
+       "source": "T-Nova-AuthZ-Service"
+   },
+   "info":
+   [
+        {
+           "msg": "Validation / Authorization Successful."
+       }
+   ]
+}
+</code></pre>
+In case the validation / authorization fails, the following response is returned.
+<pre><code>
+{
+   "metadata":
+   {
+       "source": "T-Nova-AuthZ-Service"
+   },
+   "info":
+   [
+       {
+           "msg": "Validation / Authorization Failed."
+       }
+   ]
+}
+</code></pre>
         
+
         
         
 <h2>
