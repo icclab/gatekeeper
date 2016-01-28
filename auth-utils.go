@@ -23,7 +23,7 @@
 package main
 
 import (
-	"code.google.com/p/gcfg"
+	"github.com/scalingdata/gcfg"
 	"fmt"
 	"github.com/gorilla/mux"
 	"io"
